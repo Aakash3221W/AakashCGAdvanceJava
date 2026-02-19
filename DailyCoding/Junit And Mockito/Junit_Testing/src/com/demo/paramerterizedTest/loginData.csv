@@ -1,0 +1,10 @@
+john123,password1,true
+ab,password1,false
+john,pass,false
+"",password1,false
+john,"",false
+"   ",password1,false
+john,"      ",false
+null,password1,false
+john,"null",false
+validUser,validPass123,true
