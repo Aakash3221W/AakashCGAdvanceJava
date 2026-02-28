@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Shopping Cart</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .qty-input { width: 45px; text-align: center; border: none; background: transparent; font-weight: bold; }
+        .cart-card { border-radius: 15px; border: none; }
+    </style>
+</head>
+<body class="bg-light">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm mb-5">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">🛒 TECH STORE</a>
+            <div class="navbar-nav ms-auto">
+                <a th:href="@{/products}" class="btn btn-outline-light btn-sm">← Continue Shopping</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row g-4">
+            
+            <div class="col-lg-8">
+                <div class="card cart-card shadow-sm">
+                    <div class="card-body p-4">
+                        <h4 class="mb-4 fw-bold">Shopping Cart</h4>
+                        
+                        <div th:if="${#lists.isEmpty(cartItems)}" class="text-center py-5">
+                            <p class="text-muted">Your cart is currently empty.</p>
+                            <a th:href="@{/products}" class="btn btn-primary">Start Shopping</a>
+                        </div>
+
+                        <div th:if="${not #lists.isEmpty(cartItems)}" class="table-responsive">
+                            <table class="table align-middle">
+                                <thead>
+                                    <tr class="text-muted small text-uppercase">
+                                        <th>Product Details</th>
+                                        <th class="text-center">Quantity</th>
+                                        <th class="text-end">Total Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="item : ${cartItems}">
+                                        <td>
+                                            <div class="fw-bold" th:text="${item.product.name}">Product Name</div>
+                                            <small class="text-muted" th:text="'Unit Price: ' + ${#numbers.formatDecimal(item.product.price, 1, 2)}"></small>
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="d-flex justify-content-center align-items-center">
+                                                <div class="btn-group border rounded shadow-sm" role="group">
+                                                    <form th:action="@{/updateCart}" method="post">
+                                                        <input type="hidden" name="productId" th:value="${item.product.id}" />
+                                                        <input type="hidden" name="change" value="-1" />
+                                                        <button type="submit" class="btn btn-light btn-sm px-3 border-end">-</button>
+                                                    </form>
+
+                                                    <span class="px-3 fw-bold align-self-center" th:text="${item.quantity}">1</span>
+
+                                                    <form th:action="@{/updateCart}" method="post">
+                                                        <input type="hidden" name="productId" th:value="${item.product.id}" />
+                                                        <input type="hidden" name="change" value="1" />
+                                                        <button type="submit" class="btn btn-light btn-sm px-3 border-start">+</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-end fw-bold text-primary">
+                                            <span th:text="${#numbers.formatDecimal(item.totalPrice, 1, 2)}"></span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card cart-card shadow-sm bg-white border-0">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold mb-4">Order Summary</h5>
+                        
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Subtotal</span>
+                            <span class="fw-bold" th:text="${#numbers.formatDecimal(totalAmount, 1, 2)}"></span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Shipping</span>
+                            <span class="text-success fw-bold">FREE</span>
+                        </div>
+                        <hr class="my-3">
+                        <div class="d-flex justify-content-between mb-4">
+                            <span class="h5 fw-bold">Total</span>
+                            <span class="h5 fw-bold text-primary" th:text="${#numbers.formatDecimal(totalAmount, 1, 2)}"></span>
+                        </div>
+                        
+                        <a th:href="@{/checkout}" 
+                           th:classappend="${#lists.isEmpty(cartItems)} ? 'disabled' : ''"
+                           class="btn btn-primary btn-lg w-100 shadow-sm fw-bold">
+                            Proceed to Checkout
+                        </a>
+                        
+                        <div class="text-center mt-3">
+                            <small class="text-muted text-uppercase" style="font-size: 0.7rem;">Secure Checkout Guaranteed</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
