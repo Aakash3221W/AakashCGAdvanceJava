@@ -13,7 +13,7 @@
         </div>
         <h2 class="display-5">Application Submitted!</h2>
         <p class="lead">Thank you for applying for the <strong th:text="${selectedPlan}">Plan Name</strong>.</p>
-        <p class="text-muted">Your digital application has replaced the manual paperwork process successfully[cite: 6, 19].</p>
+        <p class="text-muted">Your digital application has replaced the manual paperwork process successfully.</p>
         
         <div class="mt-4">
             <a th:href="@{/status(planName=${selectedPlan})}" class="btn btn-primary btn-lg">Track Application Status</a>
@@ -21,4 +21,5 @@
         </div>
     </div>
 </body>
+
 </html>
